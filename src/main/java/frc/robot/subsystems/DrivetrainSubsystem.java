@@ -40,6 +40,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     try {
       drive = new SwerveParser(swerveConfigDirectory).createSwerveDrive(DrivetrainConstants.MAX_VELOCITY);
       drive.setHeadingCorrection(!RobotBase.isSimulation());
+      drive.setCosineCompensator(!RobotBase.isSimulation());
     }
     catch (IOException e) {
       throw new RuntimeException("Could not find swerve drive files!!");
