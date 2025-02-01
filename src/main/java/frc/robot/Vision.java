@@ -18,7 +18,7 @@ public  class Vision {
     public static PhotonCamera intakeCam = new PhotonCamera(VisionConstants.INTAKE_CAM_NAME);
 
     //==================== Targets ==========================
-    public static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    public static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
 
     //==================== Pose Estimation ==========================
     public static Transform3d robotToCam = new Transform3d(VisionConstants.ROBOT_TO_CAM_TRANSLATION, VisionConstants.ROBOT_TO_CAM_ROTATION); // In meters and radians
