@@ -22,7 +22,7 @@ public class SetElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setSetPoint(setPoint);
+    elevator.setProfiled(setPoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
