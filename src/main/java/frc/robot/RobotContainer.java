@@ -5,10 +5,12 @@
 package frc.robot;
 
 import frc.Common.LogitechF310;
-import frc.Common.ThrustMaster;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -22,9 +24,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public class RobotContainer {
   // Create subsystems here
-  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();  
+  private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
+  private final ElevatorSubsystem elevator = new ElevatorSubsystem();  
 
-  ThrustMaster driverStick;
+  CommandJoystick driverStick;
   LogitechF310 controller;
   CommandJoystick simStick;
 
@@ -38,16 +41,16 @@ public class RobotContainer {
         drivetrain.defaultDriveCommand(
           () -> -Math.pow(MathUtil.applyDeadband(simStick.getY(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3), 
           () -> -Math.pow(MathUtil.applyDeadband(simStick.getX(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3),
-          () -> -MathUtil.applyDeadband(simStick.getZ(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND)
+          () -> -Math.pow(MathUtil.applyDeadband(driverStick.getZ(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3)
         ));
     } else {
-      driverStick = new ThrustMaster(OperatorConstants.DRIVER_JOYSTICK_PORT);
-      controller = new LogitechF310(OperatorConstants.CO_PILOT_GAMEPAD_PORT);
+      driverStick = new CommandJoystick(OperatorConstants.DRIVER_JOYSTICK_PORT);
+      // controller = new LogitechF310(OperatorConstants.CO_PILOT_GAMEPAD_PORT);
       drivetrain.setDefaultCommand(
         drivetrain.defaultDriveCommand(
           () -> -Math.pow(MathUtil.applyDeadband(driverStick.getY(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3), 
           () -> -Math.pow(MathUtil.applyDeadband(driverStick.getX(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3),
-          () -> -MathUtil.applyDeadband(driverStick.getZ(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND)
+          () -> -Math.pow(MathUtil.applyDeadband(driverStick.getZ(), OperatorConstants.DRIVER_JOYSTICK_DEADBAND), 3)
         ));
 
       configureBindings();
@@ -61,7 +64,8 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Set button commands here
-    driverStick.getTrigger().onTrue(new InstantCommand(drivetrain::zeroGyro));
+    driverStick.button(1).onTrue(new InstantCommand(drivetrain::zeroGyro));
+    driverStick.button(2).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));
   } 
 
   private void configureAutoCommands() {

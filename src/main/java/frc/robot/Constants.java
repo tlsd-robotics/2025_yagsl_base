@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+import com.thethriftybot.ThriftyNova.PIDConfig;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import swervelib.parser.PIDFConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -49,5 +53,40 @@ public final class Constants {
     public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(44.5), 0.0);
     public static final String ARM_CAM_NAME = "TopUsb";
     public static final String INTAKE_CAM_NAME = "BottomUsb";
+  }
+
+  public static final class AutonConstants {
+
+    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.0001, 0, 0);
+    public static final PIDConstants ANGLE_PID   = new PIDConstants(0.00001, 0, 0.01);
+
+    public static final double MAX_ACCELERATION = 2;
+  }
+
+  public static final class ElevatorConstants {
+    public static final int ELEVATOR_MOTOR_ID = 99;
+
+    public static final double SETPOINT_1 = 1;
+    public static final double SETPOINT_2 = 2;
+    public static final double SETPOINT_3 = 3;
+    public static final double SETPOINT_HOME = 0;
+
+    //PID Controller Constants
+    public static final double PID_P = 0.00004;
+    public static final double PID_I = 0.0;
+    public static final double PID_D = 0.0;
+
+    //FeedForward Controller Constants
+
+    //System Constants
+    public static final double ELEVATOR_ALLOWED_ACCEL_MSS = 1.0;
+    public static final double MOTOR_GEAR_RATIO = 25.0;
+    public static final double PINION_GEAR_DIAMETER_M = Units.inchesToMeters(1);
+    public static final double ELEVATOR_MOTOR_RPS_MAX = 5700.0/60.0;
+    public static final double ELEVATOR_MAX_SPEED_MS = (ELEVATOR_MOTOR_RPS_MAX / MOTOR_GEAR_RATIO) * PINION_GEAR_DIAMETER_M * Math.PI;
+    //Converts the motor revolutions into meters of elevator travel:
+    public static final double POSITION_CONVERSION_FACTOR = (PINION_GEAR_DIAMETER_M * Math.PI) / MOTOR_GEAR_RATIO;
+    //Converts motor RPM into elevator velocity in m/s      Shaft revs per sec        * Distance Per Revolution
+    public static final double VELOCITY_CONVERSION_FACTOR = (1/MOTOR_GEAR_RATIO * 60) * PINION_GEAR_DIAMETER_M * Math.PI;
   }
 }
