@@ -1,0 +1,24 @@
+Algae pickup
+    - Two motors
+        - Arm
+            - Rotational sensor
+        - Intake
+
+Coral
+    - Elevator
+        - 5 positions (Home, 1-4 Levels)
+        - motor
+    - Arm
+        - Rotation sensor
+        - motor
+    - End-effector
+        - motor
+        - Stoppage sensor (distance, color, limit, etc)
+
+Cage
+    - motor
+        - Rotation sensor
+    
+
+Autonomous
+    - Move off, and dump at pos. 1
