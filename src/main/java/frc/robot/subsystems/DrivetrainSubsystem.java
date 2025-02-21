@@ -30,7 +30,7 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class DrivetrainSubsystem extends SubsystemBase {
   /** Creates a new DrivetrainSubsystem. */
-  private File swerveConfigDirectory = new File(Filesystem.getDeployDirectory(),"swerve_old");
+  private File swerveConfigDirectory = new File(Filesystem.getDeployDirectory(),"swerve");
   private SwerveDrive drive;
   private RobotConfig config;
 

@@ -3,25 +3,25 @@
     "front": 12.375,
     "left": -10.375
   },
-  "absoluteEncoderOffset": 0,
+  "absoluteEncoderOffset": 211.7,
   "drive": {
     "type": "sparkflex_vortex",
-    "id": 20,
+    "id": 22,
     "canbus": null
   },
   "angle": {
     "type": "sparkmax_neo",
-    "id": 21,
+    "id": 23,
     "canbus": null
   },
   "encoder": {
     "type": "throughbore",
-    "id": 0,
+    "id": 1,
     "canbus": null
   },
   "inverted": {
-    "drive": false,
-    "angle": false
+    "drive": true,
+    "angle": true
   },
   "absoluteEncoderInverted": false
 }

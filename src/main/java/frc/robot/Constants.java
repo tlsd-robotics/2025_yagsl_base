@@ -5,12 +5,9 @@
 package frc.robot;
 
 import com.pathplanner.lib.config.PIDConstants;
-import com.thethriftybot.ThriftyNova.PIDConfig;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import swervelib.parser.PIDFConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -64,21 +61,36 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int ELEVATOR_MOTOR_ID = 99;
 
-    public static final double SETPOINT_1 = 1;
-    public static final double SETPOINT_2 = 2;
-    public static final double SETPOINT_3 = 3;
+    public static final int ELEVATOR_MOTOR_ID = 35;
+    public static final boolean ELEVATOR_MOTOR_INVERTED = false;
+
+    public static final double STALL_THRESHOLD_AMPS = 40.0; //TODO: tune this
+
+    public static final double VELOCITY_TOLERANCE_MS = 0.001;
+
+    //Autohome constants
+    public static final double AUTOHOME_OUTPUT_PERCENT = 0.1;
+    public static final double AUTOHOME_WAIT_TIME_SEC = 0.5;
+
+    //Setpoints
+    public static final double SETPOINT_1 = Units.inchesToMeters(5);
+    public static final double SETPOINT_2 = Units.inchesToMeters(15);
+    public static final double SETPOINT_3 = Units.inchesToMeters(26);
     public static final double SETPOINT_HOME = 0;
 
     //PID Controller Constants
-    public static final double PID_P = 0.00004;
+    public static final double PID_P = 12.0;
     public static final double PID_I = 0.0;
     public static final double PID_D = 0.0;
+
+    public static final double SETPOINT_TOLERANCE = 0.01; //1 cm
 
     //FeedForward Controller Constants
 
     //System Constants
+    public static final double ELEVATOR_MAX_HEIGHT_M = Units.inchesToMeters(26.5);
+
     public static final double ELEVATOR_ALLOWED_ACCEL_MSS = 1.0;
     public static final double MOTOR_GEAR_RATIO = 25.0;
     public static final double PINION_GEAR_DIAMETER_M = Units.inchesToMeters(1);
@@ -87,6 +99,6 @@ public final class Constants {
     //Converts the motor revolutions into meters of elevator travel:
     public static final double POSITION_CONVERSION_FACTOR = (PINION_GEAR_DIAMETER_M * Math.PI) / MOTOR_GEAR_RATIO;
     //Converts motor RPM into elevator velocity in m/s      Shaft revs per sec        * Distance Per Revolution
-    public static final double VELOCITY_CONVERSION_FACTOR = (1/MOTOR_GEAR_RATIO * 60) * PINION_GEAR_DIAMETER_M * Math.PI;
+    public static final double VELOCITY_CONVERSION_FACTOR = (1 / (MOTOR_GEAR_RATIO * 60)) * PINION_GEAR_DIAMETER_M * Math.PI;
   }
 }

@@ -22,6 +22,7 @@ public class SetElevator extends Command {
   @Override
   public void initialize() {
     elevator.setProfiled(setPoint);
+    System.out.println("Elevator set to: " + Double.toString(setPoint));
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,6 +36,6 @@ public class SetElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return elevator.atSetpoint();
   }
 }
