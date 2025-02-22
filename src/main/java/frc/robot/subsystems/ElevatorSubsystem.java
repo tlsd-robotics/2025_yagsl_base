@@ -17,7 +17,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
@@ -99,7 +98,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       return;
     }
 
-    this.setPoint = setPoint; //set the non-profiled setpoint to allow atSetpoint() to work correctly.
+    this.setPoint = MathUtil.clamp(setPoint, 0, ElevatorConstants.ELEVATOR_MAX_HEIGHT_M);
 
     //Creates states for the trapezoid profile with the current state and a state at the target position with zero velocity.
     currentInitialState = new TrapezoidProfile.State(getPosition(), getVelocity());
@@ -116,7 +115,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     currentState = ElevatorState.POSITION_CONTROL; //set elevator to postion control mode
-    this.setPoint = setPoint;
+    this.setPoint = MathUtil.clamp(setPoint, 0, ElevatorConstants.ELEVATOR_MAX_HEIGHT_M);
   }
 
   public void autoHome() {
