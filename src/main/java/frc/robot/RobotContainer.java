@@ -5,10 +5,12 @@
 package frc.robot;
 
 import frc.Common.LogitechF310;
+import frc.Common.ThrustMaster;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.elevator.SetElevator;
+import frc.robot.subsystems.AlgaeGrabberSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -22,19 +24,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class RobotContainer {
   // Create subsystems here
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();  
+  private final AlgaeGrabberSubsystem algaeGrabber = new AlgaeGrabberSubsystem();
+
 
   CommandJoystick driverStick;
-  LogitechF310 controller;
+  CommandXboxController controller;
   CommandJoystick simStick;
 
   SendableChooser<Command> autoChooser;
 
   public RobotContainer() {
+
+    controller = new CommandXboxController(OperatorConstants.CO_PILOT_GAMEPAD_PORT);
+
     // Handle simulation
     if (RobotBase.isSimulation()) {
       simStick = new CommandJoystick(OperatorConstants.DRIVER_JOYSTICK_PORT);
@@ -57,6 +65,7 @@ public class RobotContainer {
       configureBindings();
 
       elevator.enable();
+      algaeGrabber.enable();
     }
 
     // Set Default Commands here
@@ -67,11 +76,15 @@ public class RobotContainer {
 
   private void configureBindings() {
     // Set button commands here
-    driverStick.button(1).onTrue(new InstantCommand(drivetrain::zeroGyro));
+    /*driverStick.button(1).onTrue(new InstantCommand(drivetrain::zeroGyro));
     driverStick.button(3).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_3));
     driverStick.button(4).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_HOME));
-    driverStick.button(2).onTrue(new InstantCommand(elevator::autoHome));
-    driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));
+    driverStick.button(2).onTrue(new InstantCommand(elevator::autoHome, elevator));
+    driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));*/
+
+    controller.a().onTrue(new InstantCommand(() -> {algaeGrabber.set(0);}, algaeGrabber));
+    controller.y().onTrue(new InstantCommand(() -> {algaeGrabber.set(20);}, algaeGrabber));
+
   } 
 
   private void configureAutoCommands() {

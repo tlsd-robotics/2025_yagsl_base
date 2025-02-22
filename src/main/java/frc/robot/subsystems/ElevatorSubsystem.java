@@ -71,7 +71,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     config.idleMode(IdleMode.kBrake);
-    config.smartCurrentLimit(40);
+    config.smartCurrentLimit(ElevatorConstants.ELEVATOR_MOTOR_SMART_CURRENT_LIMIT);
     config.inverted(ElevatorConstants.ELEVATOR_MOTOR_INVERTED);
     config.encoder.positionConversionFactor(ElevatorConstants.POSITION_CONVERSION_FACTOR);
     config.encoder.velocityConversionFactor(ElevatorConstants.VELOCITY_CONVERSION_FACTOR);
@@ -86,6 +86,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public double getVelocity() {
     return elevatorRelativeEncoder.getVelocity();
+  }
+
+  public ElevatorState getState() {
+    return currentState;
   }
 
   public void setProfiled(double setPoint) {

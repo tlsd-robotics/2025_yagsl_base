@@ -1,7 +1,7 @@
 package frc.Common;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.Common.ConstraintConstructors.PitchConstraint;
+import frc.Common.ConstraintClasses.RangeConstraint;
 
 /** This is a collection of all setpoints for each subsystem */
 public class SetpointConstructors {
@@ -40,7 +40,7 @@ public class SetpointConstructors {
 
       Value cylinderValueOne;
       Value cylinderValueTwo;
-      PitchConstraint constraint;
+      RangeConstraint constraint;
 
       /**
        * Stores 2 solenoid values at once for use with the doublesolenoidgroup object's set function

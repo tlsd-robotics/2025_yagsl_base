@@ -8,6 +8,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import frc.Common.ConstraintClasses.RangeConstraint;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -60,12 +61,15 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+
+
   public static final class ElevatorConstants {
 
     public static final int ELEVATOR_MOTOR_ID = 35;
     public static final boolean ELEVATOR_MOTOR_INVERTED = false;
 
     public static final double STALL_THRESHOLD_AMPS = 40.0; //TODO: tune this
+    public static final int ELEVATOR_MOTOR_SMART_CURRENT_LIMIT = 40;
 
     public static final double VELOCITY_TOLERANCE_MS = 0.001;
 
@@ -100,5 +104,56 @@ public final class Constants {
     public static final double POSITION_CONVERSION_FACTOR = (PINION_GEAR_DIAMETER_M * Math.PI) / MOTOR_GEAR_RATIO;
     //Converts motor RPM into elevator velocity in m/s      Shaft revs per sec        * Distance Per Revolution
     public static final double VELOCITY_CONVERSION_FACTOR = (1 / (MOTOR_GEAR_RATIO * 60)) * PINION_GEAR_DIAMETER_M * Math.PI;
+  }
+
+
+  public static final class AlgaeGrabberConstants {
+
+    public static final int ANGLE_MOTOR_ID = 33;
+    public static final int INTAKE_MOTOR_ID = 31;
+    public static final boolean ANGLE_MOTOR_INVERTED = false;
+    public static final boolean INTAKE_MOTOR_INVERTED = false;
+    public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 40;
+    public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
+    public static final int ABSOLUTE_ENCODER_PORT = 4;
+    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 226.5;
+    public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+
+
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-15.0, 58.0);
+
+    public static final double ANGLE_PID_P = 0.005;
+    public static final double ANGLE_PID_I = 0.001;
+    public static final double ANGLE_PID_D = 0.0;
+
+    public static final double ANGLE_FF_KS = 0.0;
+    public static final double ANGLE_FF_KG = 0.1;
+    public static final double ANGLE_FF_KV = 0.0;
+
+    public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
+
+  }
+
+  public static final class CoralArmConstants {
+
+    public static final int ANGLE_MOTOR_ID = 32;
+    public static final int INTAKE_MOTOR_ID = 34;
+    public static final boolean ANGLE_MOTOR_INVERTED = false;
+    public static final boolean INTAKE_MOTOR_INVERTED = false;
+    public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 20;
+    public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
+    public static final int ABSOLUTE_ENCODER_PORT = 4;
+    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 0.0;
+    public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+
+
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-90, 90);
+
+    public static final double ANGLE_PID_P = 0.003;
+    public static final double ANGLE_PID_I = 0.0;
+    public static final double ANGLE_PID_D = 0.0;
+
+    public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
+
   }
 }

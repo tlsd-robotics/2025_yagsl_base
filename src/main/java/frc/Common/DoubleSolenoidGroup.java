@@ -2,7 +2,7 @@ package frc.Common;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import frc.Common.ConstraintConstructors.PitchConstraint;
+import frc.Common.ConstraintClasses.RangeConstraint;
 import frc.Common.SetpointConstructors.DoubleSolenoidGroupSetpoint;
 
 /** A custom group class for Double Solenoids */
@@ -47,7 +47,7 @@ public class DoubleSolenoidGroup {
      * @param currentValue
      * @param constraint
      */
-    public void setWithConstraint(DoubleSolenoidGroupSetpoint setpoint, double currentValue, PitchConstraint constraint) {
+    public void setWithConstraint(DoubleSolenoidGroupSetpoint setpoint, double currentValue, RangeConstraint constraint) {
         if (currentValue > constraint.getLowerConstraint() && currentValue < constraint.getUpperConstraint()) {
             solenoidOne.set(setpoint.getCylinderValueOne());
             solenoidTwo.set(setpoint.getCylinderValueTwo());
