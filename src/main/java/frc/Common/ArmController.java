@@ -235,7 +235,7 @@ public class ArmController {
     /**
      * Must be called in a periodic method to run the arm.
      */
-    void execute() {
+    public void execute() {
 
         if (debugDataEnabled) {
             SmartDashboard.putString(displayName + " State: ", getState().displayName);

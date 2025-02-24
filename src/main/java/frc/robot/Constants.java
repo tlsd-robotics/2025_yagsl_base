@@ -153,7 +153,13 @@ public final class Constants {
     public static final double ANGLE_PID_I = 0.0;
     public static final double ANGLE_PID_D = 0.0;
 
+    public static final double FF_KS = 0;
+    public static final double FF_KG = 0;
+    public static final double FF_KV = 0;
+
     public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
 
+    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
+    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
   }
 }
