@@ -11,6 +11,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.AlgaeGrabberSubsystem;
+import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 
@@ -31,6 +32,7 @@ public class RobotContainer {
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();  
   private final AlgaeGrabberSubsystem algaeGrabber = new AlgaeGrabberSubsystem();
+  private final CoralArmSubsystem coralArm = new CoralArmSubsystem();
 
 
   CommandJoystick driverStick;
@@ -64,8 +66,10 @@ public class RobotContainer {
 
       configureBindings();
 
+      //TODO: Make sure these are called every time the robot is enabled to reset PID Controllers.
       elevator.enable();
-      algaeGrabber.enable();
+      //algaeGrabber.enable();
+      coralArm.enable();
     }
 
     // Set Default Commands here
@@ -82,8 +86,8 @@ public class RobotContainer {
     driverStick.button(2).onTrue(new InstantCommand(elevator::autoHome, elevator));
     driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));*/
 
-    controller.a().onTrue(new InstantCommand(() -> {algaeGrabber.set(0);}, algaeGrabber));
-    controller.y().onTrue(new InstantCommand(() -> {algaeGrabber.set(20);}, algaeGrabber));
+    controller.a().onTrue(new InstantCommand(() -> {coralArm.setProfiled(0);}, algaeGrabber));
+    controller.y().onTrue(new InstantCommand(() -> {coralArm.setProfiled(20);}, algaeGrabber));
 
   } 
 

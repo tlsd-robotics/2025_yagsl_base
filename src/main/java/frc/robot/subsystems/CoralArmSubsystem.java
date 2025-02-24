@@ -70,7 +70,7 @@ public class CoralArmSubsystem extends SubsystemBase {
     angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    absoluteEncoder.setInverted(false);
+    absoluteEncoder.setInverted(CoralArmConstants.ABSOLUTE_ENCODER_INVERTED);
 
     if (!absoluteEncoder.isConnected()) {
       arm.disable();

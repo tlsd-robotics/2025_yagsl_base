@@ -122,15 +122,18 @@ public final class Constants {
 
     public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-15.0, 58.0);
 
-    public static final double ANGLE_PID_P = 0.005;
+    public static final double ANGLE_PID_P = 0.05;
     public static final double ANGLE_PID_I = 0.001;
-    public static final double ANGLE_PID_D = 0.0;
+    public static final double ANGLE_PID_D = 0;
 
-    public static final double ANGLE_FF_KS = 0.0;
-    public static final double ANGLE_FF_KG = 0.1;
-    public static final double ANGLE_FF_KV = 0.0;
+    public static final double FF_KS = 0;
+    public static final double FF_KG = 8.93 / 12.0;
+    public static final double FF_KV = 0.5 / 12.0;
 
     public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
+
+    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
+    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
 
   }
 
@@ -138,19 +141,19 @@ public final class Constants {
 
     public static final int ANGLE_MOTOR_ID = 32;
     public static final int INTAKE_MOTOR_ID = 34;
-    public static final boolean ANGLE_MOTOR_INVERTED = false;
+    public static final boolean ANGLE_MOTOR_INVERTED = true;
     public static final boolean INTAKE_MOTOR_INVERTED = false;
-    public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 20;
+    public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 40;
     public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
-    public static final int ABSOLUTE_ENCODER_PORT = 4;
-    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 0.0;
-    public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
+    public static final int ABSOLUTE_ENCODER_PORT = 5;
+    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 290.0;
+    public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
 
 
     public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-90, 90);
 
-    public static final double ANGLE_PID_P = 0.003;
-    public static final double ANGLE_PID_I = 0.0;
+    public static final double ANGLE_PID_P = 0.2;
+    public static final double ANGLE_PID_I = 0.001;
     public static final double ANGLE_PID_D = 0.0;
 
     public static final double FF_KS = 0;

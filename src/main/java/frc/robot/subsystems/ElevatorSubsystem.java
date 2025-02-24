@@ -128,6 +128,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void enable() {
     setPoint = getPosition(); //change setpoint to current position to prevent erratic movement
     currentState = ElevatorState.POSITION_CONTROL;
+    elevatorPID.reset();
   }
 
   public void disable() {

@@ -11,33 +11,21 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Common.ArmController;
+import frc.Common.EncoderVelocityTracker;
+import frc.Common.ArmController.AngleControlState;
+import frc.Common.ArmController.AngleUnit;
+import frc.Common.ConstraintClasses.RangeConstraint;
 import frc.robot.Constants.*;
 
 public class AlgaeGrabberSubsystem extends SubsystemBase {
   /** Creates a new AlgaeGrabberSubsystem. */
-
-  enum AngleControlState {
-    POSITION_CONTROL("Position Control"),
-    DISABLED("Disabled"),
-    FAULT("Hardware Fault");
-
-    String displayName;
-
-    AngleControlState(String displayName) {
-      this.displayName = displayName;
-    };
-  }
-
-
 
   private SparkMax angleMotor = new SparkMax(AlgaeGrabberConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
   private SparkMax intakeMotor = new SparkMax(AlgaeGrabberConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
@@ -45,21 +33,31 @@ public class AlgaeGrabberSubsystem extends SubsystemBase {
   private SparkMaxConfig intakeConfig = new SparkMaxConfig();
 
   private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(AlgaeGrabberConstants.ABSOLUTE_ENCODER_PORT);
+  private EncoderVelocityTracker encoderVelocity = new EncoderVelocityTracker(this::getRawAngle);
 
-  private PIDController anglePID = new PIDController(
-    AlgaeGrabberConstants.ANGLE_PID_P, 
+  private ArmController arm = new ArmController(
+    (double output) -> {angleMotor.set(MathUtil.clamp(output, -1, 1)); SmartDashboard.putNumber("AngleMotor commanded output: ", output);},
+    this::getRawAngle,
+    this::getAngularVelocity,
+
+    AlgaeGrabberConstants.ABSOLUTE_ENCODER_OFFSET_DEGREES,
+    AlgaeGrabberConstants.ANGLE_SETPOINT_TOLERANCE_DEGREES,
+    new RangeConstraint(-90, 90),
+
+    AlgaeGrabberConstants.ANGLE_PID_P,
     AlgaeGrabberConstants.ANGLE_PID_I,
-    AlgaeGrabberConstants.ANGLE_PID_D
-  );
+    AlgaeGrabberConstants.ANGLE_PID_D,
 
-  private ArmFeedforward angleFF = new ArmFeedforward(
-    AlgaeGrabberConstants.ANGLE_FF_KS,
-    AlgaeGrabberConstants.ANGLE_FF_KG,
-    AlgaeGrabberConstants.ANGLE_FF_KV
-  );
+    AlgaeGrabberConstants.FF_KS,
+    AlgaeGrabberConstants.FF_KG,
+    AlgaeGrabberConstants.FF_KV,
 
-  private AngleControlState currentAngleControlState = AngleControlState.DISABLED;
-  private double setpoint = 0.0;
+    AlgaeGrabberConstants.MAX_ANGULAR_VELOCITY_DEG_SEC,
+    AlgaeGrabberConstants.MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC,
+
+    "Algae Arm",
+    AngleUnit.DEGREES
+  );
 
   private Alert hardwareFaultAlert = new Alert("Algae arm control has been disabled due to a hardware fault", AlertType.kError);
 
@@ -74,32 +72,34 @@ public class AlgaeGrabberSubsystem extends SubsystemBase {
     angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    absoluteEncoder.setInverted(false);
+    absoluteEncoder.setInverted(AlgaeGrabberConstants.ABSOLUTE_ENCODER_INVERTED);
 
     if (!absoluteEncoder.isConnected()) {
-      currentAngleControlState = AngleControlState.FAULT;
+      arm.disable();
       hardwareFaultAlert.setText(hardwareFaultAlert.getText() + ": Absolute encoder fault");
       hardwareFaultAlert.set(true);
     }
   }
 
+  public double getRawAngle() {
+    return (absoluteEncoder.get() * 360.0);
+  }
 
-  //Returns the current angle of the arm in degrees
+  public double getAngularVelocity() {
+    //return encoderVelocity.getVelocity();
+    return 0;
+  }
+
   public double getAngle() {
-
-    if (!absoluteEncoder.isConnected()) {
-      hardwareFaultAlert.setText(hardwareFaultAlert.getText() + ": Absolute encoder fault");
-      hardwareFaultAlert.set(true);
-
-      currentAngleControlState = AngleControlState.FAULT;
-      return 0;
-    }
-
-    return (absoluteEncoder.get() * 360.0) - AlgaeGrabberConstants.ABSOLUTE_ENCODER_OFFSET_DEGREES;
+    return arm.getAngle();
   }
 
-  public void set(double angleDegrees) {
-    setpoint = AlgaeGrabberConstants.ANGLE_RANGE_DEGREES.clamp(angleDegrees);
+  public void setPosition(double angleDegrees) {
+    arm.setAngle(angleDegrees);
+  }
+
+  public void setProfiled(double angleDegrees) {
+    arm.setProfiled(angleDegrees);
   }
 
   public void setIntake(double speed) {
@@ -109,56 +109,33 @@ public class AlgaeGrabberSubsystem extends SubsystemBase {
   //Enables angle control
   public void enable() {
     if (absoluteEncoder.isConnected()) {
-      setpoint = getAngle();
-      currentAngleControlState = AngleControlState.POSITION_CONTROL;
+      arm.enable();
       hardwareFaultAlert.set(false);
     }
     else {
-      currentAngleControlState = AngleControlState.FAULT;
+      arm.disable();
+      hardwareFaultAlert.set(true);
     }
   }
 
   //Disables angle control
   public void disable() {
-    if (currentAngleControlState != AngleControlState.FAULT) {
-      currentAngleControlState = AngleControlState.DISABLED;
-    }
-  }
-
-  public AngleControlState getAngleControlState() {
-    return currentAngleControlState;
+    arm.disable();
   }
 
   public boolean isEnabled() {
-    return currentAngleControlState == AngleControlState.POSITION_CONTROL;
+    return arm.getState() != AngleControlState.DISABLED;
   }
 
   public boolean atSetpoint() {
-    return MathUtil.isNear(setpoint, getAngle(), AlgaeGrabberConstants.ANGLE_SETPOINT_TOLERANCE_DEGREES);
+    return arm.atSetpoint();
   }
-
-
 
   @Override
   public void periodic() {
-    //Output data to smart dashboard:
-    SmartDashboard.putString("Algae Arm State: ", getAngleControlState().displayName);
-    SmartDashboard.putNumber("Algae Arm Current Angle (Degrees): ", getAngle());
-    SmartDashboard.putNumber("Algae Arm Angle Setpoint (Degrees): ", setpoint);
-    SmartDashboard.putBoolean("Algae Arm at Setpoint: ", atSetpoint());
-    SmartDashboard.putNumber("Algae Arm Angle Motor Output Power: ", angleMotor.getAppliedOutput());
+    arm.execute();
+    encoderVelocity.update();
 
-    //Angle control:
-    switch (currentAngleControlState) {
-      case POSITION_CONTROL:
-        SmartDashboard.putNumber("pid calculation: ", anglePID.calculate(getAngle(), setpoint));
-        angleMotor.set(anglePID.calculate(getAngle(), setpoint) + angleFF.calculate(Units.degreesToRadians(setpoint), 0));
-        break;
-
-      case DISABLED:
-      case FAULT:
-        angleMotor.set(0);
-        break;
-    }
+    SmartDashboard.putNumber("Algae Grabber Motor Output: ", angleMotor.getAppliedOutput());
   }
 }
