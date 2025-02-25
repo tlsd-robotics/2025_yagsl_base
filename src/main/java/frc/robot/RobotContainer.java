@@ -84,7 +84,8 @@ public class RobotContainer {
     driverStick.button(3).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_3));
     driverStick.button(4).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_HOME));
     driverStick.button(2).onTrue(new InstantCommand(elevator::autoHome, elevator));
-    driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));*/
+    driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));
+    controller.button(2).onTrue(*/
 
     controller.a().onTrue(new InstantCommand(() -> {coralArm.setProfiled(0);}, algaeGrabber));
     controller.y().onTrue(new InstantCommand(() -> {coralArm.setProfiled(20);}, algaeGrabber));
