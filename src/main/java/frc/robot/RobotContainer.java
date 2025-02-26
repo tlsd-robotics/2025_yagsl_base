@@ -6,24 +6,35 @@ package frc.robot;
 
 import frc.Common.LogitechF310;
 import frc.Common.ThrustMaster;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.CoralArmConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DoNothing;
+import frc.robot.commands.AlgaeArm.AlgeaGrabberDefaultCommand;
+import frc.robot.commands.CoralArm.CoralArmDefualtCommand;
+import frc.robot.commands.CoralArm.SetCoralArm;
+import frc.robot.commands.elevator.ElevatorDefaultCommand;
 import frc.robot.commands.elevator.SetElevator;
 import frc.robot.subsystems.AlgaeGrabberSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralArmSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem.ElevatorState;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -33,7 +44,7 @@ public class RobotContainer {
   private final ElevatorSubsystem elevator = new ElevatorSubsystem();  
   private final AlgaeGrabberSubsystem algaeGrabber = new AlgaeGrabberSubsystem();
   private final CoralArmSubsystem coralArm = new CoralArmSubsystem();
-
+  private final ClimberSubsystem climber = new ClimberSubsystem();
 
   CommandJoystick driverStick;
   CommandXboxController controller;
@@ -65,12 +76,11 @@ public class RobotContainer {
         ));
 
       configureBindings();
-
-      //TODO: Make sure these are called every time the robot is enabled to reset PID Controllers.
-      elevator.enable();
-      //algaeGrabber.enable();
-      coralArm.enable();
     }
+
+    coralArm.setDefaultCommand(new CoralArmDefualtCommand(() -> -controller.getLeftY(), controller.povRight(), controller.povLeft(), driverStick.trigger(), coralArm));
+    algaeGrabber.setDefaultCommand(new AlgeaGrabberDefaultCommand(() -> -controller.getRightY(), controller.povDown(), controller.povUp(), algaeGrabber));
+    elevator.setDefaultCommand(new ElevatorDefaultCommand(() -> {return controller.getRightTriggerAxis() - controller.getLeftTriggerAxis();}, elevator));
 
     // Set Default Commands here
 
@@ -85,12 +95,25 @@ public class RobotContainer {
     driverStick.button(4).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_HOME));
     driverStick.button(2).onTrue(new InstantCommand(elevator::autoHome, elevator));
     driverStick.button(5).onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_1));
-    controller.button(2).onTrue(*/
+    controller.button(2).onTrue(new IntakeSubsystems(intake, IntakeSubsystems)*/
 
-    controller.a().onTrue(new InstantCommand(() -> {coralArm.setProfiled(0);}, algaeGrabber));
-    controller.y().onTrue(new InstantCommand(() -> {coralArm.setProfiled(20);}, algaeGrabber));
+    //Driver Binds
+    driverStick.button(ThrustMaster.MIDDLE).whileTrue(new InstantCommand(drivetrain::lock, drivetrain));
+    driverStick.button(14).onTrue(new InstantCommand(drivetrain::zeroGyro));
 
-  } 
+    driverStick.povDown().whileTrue(new InstantCommand(() -> climber.set(ClimberConstants.CONTROL_SPEED),  climber).repeatedly().finallyDo(() -> climber.set(0)));
+    driverStick.povUp().whileTrue(  new InstantCommand(() -> climber.set(-ClimberConstants.CONTROL_SPEED), climber).repeatedly().finallyDo(() -> climber.set(0)));
+
+    //Manipulator Binds
+    controller.x().onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_HOME));
+    controller.y().onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_L2));
+    controller.b().onTrue(new SetElevator(elevator, ElevatorConstants.SETPOINT_L3));
+
+    controller.a().onTrue(new SetCoralArm(CoralArmConstants.INTAKE_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(CoralArmConstants.INTAKE_IN_SPEED))).repeatedly());
+    controller.a().onFalse(new SetCoralArm(CoralArmConstants.HOME_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(0))));
+
+    controller.back().onTrue(new InstantCommand(elevator::autoHome, elevator).until(() -> {return elevator.getState() != ElevatorState.HOMING;}));
+  }
 
   private void configureAutoCommands() {
     autoChooser = AutoBuilder.buildAutoChooser();
@@ -103,5 +126,17 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return autoChooser.getSelected();
+  }
+
+  public void onEnable() {
+    elevator.enable();
+    algaeGrabber.enable();
+    coralArm.enable();
+  }
+
+  public void onDisable() {
+    elevator.disable();
+    algaeGrabber.disable();
+    coralArm.disable();
   }
 }

@@ -4,30 +4,44 @@
 
 package frc.robot.commands.elevator;
 
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class SetElevator extends Command {
-  private ElevatorSubsystem elevator;
-  private double setPoint;
+public class ElevatorDefaultCommand extends Command {
 
-  public SetElevator(ElevatorSubsystem elevator, double setPoint) {
+  DoubleSupplier controlAxis;
+  ElevatorSubsystem elevator;
+  Timer controlTimer = new Timer();
+
+  /** Creates a new ElevatorDefaultCommand. */
+  public ElevatorDefaultCommand(DoubleSupplier controlAxis, ElevatorSubsystem elevator) {
+    
+    this.controlAxis = controlAxis;
     this.elevator = elevator;
-    this.setPoint = setPoint;
+
     addRequirements(elevator);
+
   }
-  
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.setProfiled(setPoint);
-    //System.out.println("Elevator set to: " + Double.toString(setPoint));
+    controlTimer.restart();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    elevator.setPosition(elevator.getSetpoint() + controlAxis.getAsDouble() * ElevatorConstants.MANUAL_CONTROL_RATE_M_S * controlTimer.get());
+    controlTimer.restart();
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -36,6 +50,6 @@ public class SetElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.atSetpoint();
+    return false;
   }
 }

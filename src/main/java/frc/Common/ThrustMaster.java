@@ -12,31 +12,31 @@ public class ThrustMaster  {
 
 //==============================================================================
 //=============================== Joystick IDs ===================================
-    private final int TRIGGER = 1;
-    private final int MIDDLE = 2;
-    private final int LEFT = 3;
-    private final int RIGHT = 4;
+    public static final int TRIGGER = 1;
+    public static final int MIDDLE = 2;
+    public static final int LEFT = 3;
+    public static final int RIGHT = 4;
 
-    private final int LEFT_FRONT_LEFT = 5;
-    private final int LEFT_FRONT_MIDDLE = 6;
-    private final int LEFT_FRONT_RIGHT = 7;
-    private final int LEFT_BACK_RIGHT = 8;
-    private final int LEFT_BACK_MIDDLE = 9;
-    private final int LEFT_BACK_LEFT = 10;
+    public static final int LEFT_FRONT_LEFT = 5;
+    public static final int LEFT_FRONT_MIDDLE = 6;
+    public static final int LEFT_FRONT_RIGHT = 7;
+    public static final int LEFT_BACK_RIGHT = 8;
+    public static final int LEFT_BACK_MIDDLE = 9;
+    public static final int LEFT_BACK_LEFT = 10;
 
-    private final int RIGHT_FRONT_RIGHT = 11;
-    private final int RIGHT_FRONT_MIDDLE = 12;
-    private final int RIGHT_FRONT_LEFT = 13;
-    private final int RIGHT_BACK_LEFT = 14;
-    private final int RIGHT_BACK_MIDDLE = 15;
-    private final int RIGHT_BACK_RIGHT = 16;
+    public static final int RIGHT_FRONT_RIGHT = 11;
+    public static final int RIGHT_FRONT_MIDDLE = 12;
+    public static final int RIGHT_FRONT_LEFT = 13;
+    public static final int RIGHT_BACK_LEFT = 14;
+    public static final int RIGHT_BACK_MIDDLE = 15;
+    public static final int RIGHT_BACK_RIGHT = 16;
 
-    private final int xAxis = 1;
-    private final int yAxis = 2;
-    private final int zAxis = 3;
-    private final int throttleAxis = 4;
-    private final int hatXAxis = 5;
-    private final int hatYAxis = 6;
+    public static final int xAxis = 1;
+    public static final int yAxis = 2;
+    public static final int zAxis = 3;
+    public static final int throttleAxis = 4;
+    public static final int hatXAxis = 5;
+    public static final int hatYAxis = 6;
 
 
 //==============================================================================

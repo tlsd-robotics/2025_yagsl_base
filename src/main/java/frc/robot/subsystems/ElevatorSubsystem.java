@@ -22,13 +22,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Common.SetpointConstructors;
 import frc.robot.Constants.ElevatorConstants;
 
 //TODO: Fix stall detection by averaging speed over time. It is currently detecting stops from imperfections in the racks.
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  enum ElevatorState {
+  public enum ElevatorState {
     DISABLED("Disabled"),
     POSITION_CONTROL("Position Control"),
     PROFILED_CONTROL("Profiled Control"),
@@ -89,6 +90,10 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorState getState() {
     return currentState;
+  }
+
+  public double getSetpoint() {
+    return setPoint;
   }
 
   public void setProfiled(double setPoint) {
@@ -200,6 +205,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
     }
 
+    /*
     //Stall Detection:
     //If the elevator is not moving, is not at its setpoint, and the motor is using a current over STALL_THRESHOLD_AMPS, 
     //assume the elevator is stuck and possibly zeroed improperly. Disable elevator control.
@@ -210,6 +216,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       stallDetectedAlert.set(true);
 
     }
+    */
 
   }
 }

@@ -42,7 +42,7 @@ public class AlgaeGrabberSubsystem extends SubsystemBase {
 
     AlgaeGrabberConstants.ABSOLUTE_ENCODER_OFFSET_DEGREES,
     AlgaeGrabberConstants.ANGLE_SETPOINT_TOLERANCE_DEGREES,
-    new RangeConstraint(-90, 90),
+    AlgaeGrabberConstants.ANGLE_RANGE_DEGREES,
 
     AlgaeGrabberConstants.ANGLE_PID_P,
     AlgaeGrabberConstants.ANGLE_PID_I,
@@ -92,6 +92,10 @@ public class AlgaeGrabberSubsystem extends SubsystemBase {
 
   public double getAngle() {
     return arm.getAngle();
+  }
+
+  public double getSetpoint() {
+    return arm.getSetpoint();
   }
 
   public void setPosition(double angleDegrees) {

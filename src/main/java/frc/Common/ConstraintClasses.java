@@ -1,5 +1,7 @@
 package frc.Common;
 
+import edu.wpi.first.math.MathUtil;
+
 /** Create custom contraints here */
 public class ConstraintClasses {
 
@@ -42,17 +44,16 @@ public class ConstraintClasses {
         * @return Returns the input value if it is within the constraints, otherwise returns the closest constraint.
         */
         public double clamp(double input) {
-          if (input > LOWER_CONSTRAINT) {
-            if (input < UPPER_CONSTRAINT) {
-              return input;
-            }
-            else {
-              return UPPER_CONSTRAINT;
-            }
-          }
-          else {
-            return LOWER_CONSTRAINT;
-          }
+          return MathUtil.clamp(input, LOWER_CONSTRAINT, UPPER_CONSTRAINT);
+        }
+
+        /**
+         * 
+         * @param value
+         * @return Retruns true if value is within the constrained range.
+         */
+        public boolean inRange(double value) {
+          return (value <= UPPER_CONSTRAINT) && (value >= LOWER_CONSTRAINT);
         }
       }
 }

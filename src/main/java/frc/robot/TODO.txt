@@ -22,3 +22,44 @@ Cage
 
 Autonomous
     - Move off, and dump at pos. 1
+
+
+
+Elevator to setpoint:
+ - Home / Coral Station (M)
+ - L4 (M)
+ - L3 (M)
+ - L2 (M)
+
+ Elevator arm to setpoint:
+ - Up (M)
+ - Home (M)
+
+ Algae Arm to Setpoint:
+ - Home / Down (M)
+
+Toggle Subsystems:
+- Coral Arm (M) 
+- Algae Arm (M)
+- Elevator (M)
+
+Drivetrain:
+- Reset Field Oriented (D) *
+- Brake (D) *
+- Coral Arm Drop Trigger (D) *
+
+Intake Wheels:
+- Coral Arm Intake FWD
+- Coral Arm Intake REV
+- Algae Arm Intake FWD
+- Algae Arm Intake REV
+
+ANALOG CONTROLS
+- Elevator Up/Down
+- Coral Arm Up/Down
+- Algae Arm Up/Down
+- Climber
+
+
+
+

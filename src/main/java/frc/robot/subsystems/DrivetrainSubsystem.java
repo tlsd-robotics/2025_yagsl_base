@@ -118,6 +118,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     drive.setChassisSpeeds(chassisSpeeds);
   }
 
+  public void lock() {
+    drive.lockPose();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

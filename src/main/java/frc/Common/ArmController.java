@@ -153,7 +153,7 @@ public class ArmController {
         pid = new PIDController(PID_P, PID_I, PID_D);
         ff  = new ArmFeedforward(FF_KS, FF_KG, FF_KV);
 
-        motionProfile = new TrapezoidProfile(new Constraints(MAX_ANGULAR_VELOCITY * angleUnit.conversionFactorToRadians, MAX_PROFILED_ANGULAR_ACCELERATION * angleUnit.conversionFactorToRadians));
+        motionProfile = new TrapezoidProfile(new Constraints(MAX_ANGULAR_VELOCITY, MAX_PROFILED_ANGULAR_ACCELERATION));
 
         this.displayName = displayName;
         this.angleUnit  = angleUnit;
@@ -187,6 +187,9 @@ public class ArmController {
      * @param setpoint The angle setpoint. Will be clamped to the range set in allowedAngleRange.
      */
     public void setAngle(double setpoint) {
+        if (currentControlState != AngleControlState.DISABLED) {
+            currentControlState = AngleControlState.POSITION_CONTROL;
+        }
         this.setpoint = allowedAngleRange.clamp(setpoint);
         pid.reset();
     }
@@ -210,6 +213,10 @@ public class ArmController {
      * @param setpoint The angle setpoint. Will be clamped to the range set in allowedAngleRange.
      */
     public void setProfiled(double setpoint) {
+        if (currentControlState == AngleControlState.DISABLED) {
+            return;
+        }
+        
         currentControlState = AngleControlState.PROFILED_CONTROL;
         currentInitialState = new TrapezoidProfile.State(getAngle(), getVelocity());
         currentTargetState  = new TrapezoidProfile.State(allowedAngleRange.clamp(setpoint), 0);
@@ -226,6 +233,14 @@ public class ArmController {
      */
     public boolean atSetpoint() {
         return MathUtil.isNear(setpoint, getAngle(), ANGLE_SETPOINT_TOLERANCE);
+    }
+
+    /**
+     * 
+     * @return The Current Angle Setpoint
+     */
+    public double getSetpoint() {
+        return setpoint;
     }
 
     /**

@@ -78,9 +78,8 @@ public final class Constants {
     public static final double AUTOHOME_WAIT_TIME_SEC = 0.5;
 
     //Setpoints
-    public static final double SETPOINT_1 = Units.inchesToMeters(5);
-    public static final double SETPOINT_2 = Units.inchesToMeters(15);
-    public static final double SETPOINT_3 = Units.inchesToMeters(26);
+    public static final double SETPOINT_L2 = Units.inchesToMeters(10);
+    public static final double SETPOINT_L3 = Units.inchesToMeters(25);
     public static final double SETPOINT_HOME = 0;
 
     //PID Controller Constants
@@ -95,7 +94,7 @@ public final class Constants {
     //System Constants
     public static final double ELEVATOR_MAX_HEIGHT_M = Units.inchesToMeters(26.5);
 
-    public static final double ELEVATOR_ALLOWED_ACCEL_MSS = 1.0;
+    public static final double ELEVATOR_ALLOWED_ACCEL_MSS = 0.8;
     public static final double MOTOR_GEAR_RATIO = 25.0;
     public static final double PINION_GEAR_DIAMETER_M = Units.inchesToMeters(1);
     public static final double ELEVATOR_MOTOR_RPS_MAX = 5700.0/60.0;
@@ -104,6 +103,9 @@ public final class Constants {
     public static final double POSITION_CONVERSION_FACTOR = (PINION_GEAR_DIAMETER_M * Math.PI) / MOTOR_GEAR_RATIO;
     //Converts motor RPM into elevator velocity in m/s      Shaft revs per sec        * Distance Per Revolution
     public static final double VELOCITY_CONVERSION_FACTOR = (1 / (MOTOR_GEAR_RATIO * 60)) * PINION_GEAR_DIAMETER_M * Math.PI;
+
+    //Manual control constants
+    public static final double MANUAL_CONTROL_RATE_M_S = 0.1;
   }
 
 
@@ -116,24 +118,29 @@ public final class Constants {
     public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 40;
     public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
     public static final int ABSOLUTE_ENCODER_PORT = 4;
-    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 226.5;
+    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 42.17;
     public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
 
 
     public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-15.0, 58.0);
 
-    public static final double ANGLE_PID_P = 0.05;
-    public static final double ANGLE_PID_I = 0.001;
+    public static final double ANGLE_PID_P = 0.012;
+    public static final double ANGLE_PID_I = 0.00001;
     public static final double ANGLE_PID_D = 0;
 
     public static final double FF_KS = 0;
-    public static final double FF_KG = 8.93 / 12.0;
-    public static final double FF_KV = 0.5 / 12.0;
+    public static final double FF_KG = 0;
+    public static final double FF_KV = 0;
 
     public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
 
     public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
     public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
+
+    public static final double INTAKE_IN_SPEED = -0.3;
+    public static final double INTAKE_OUT_SPEED = 0.3;
+    
+    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 30.0;
 
   }
 
@@ -146,13 +153,17 @@ public final class Constants {
     public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 40;
     public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
     public static final int ABSOLUTE_ENCODER_PORT = 5;
-    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 290.0;
+    public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = -2.8;
     public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
 
 
-    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-90, 90);
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-116, 80);
 
-    public static final double ANGLE_PID_P = 0.2;
+    public static final double UP_SETPOINT = 70;
+    public static final double HOME_SETPOINT = -80;
+    public static final double INTAKE_SETPOINT = -116;
+
+    public static final double ANGLE_PID_P = 0.015;
     public static final double ANGLE_PID_I = 0.001;
     public static final double ANGLE_PID_D = 0.0;
 
@@ -162,7 +173,30 @@ public final class Constants {
 
     public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
 
-    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
-    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
+    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 30;
+    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 30;
+
+    public static final double DRIVER_TRIGGER_REVERSE_THRESHOLD = 0;
+    public static final double INTAKE_OUT_SPEED = 1.0;
+    public static final double INTAKE_IN_SPEED = -1.0;
+
+    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 30.0;
+  }
+
+  public static class ClimberConstants {
+
+    public static final int MOTOR_ID = 30;
+    public static final int ABSOLUTE_ENCODER_PORT = 6;
+    public static final boolean MOTOR_INVERTED = true;
+    public static final boolean ENCODER_IVNERTED = true;
+    
+    public static final double ABSOLUTE_ENCODER_OFFSET = 197.3;
+
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(0, 220);
+
+    public static final double CONTROL_SPEED = 0.3;
+
+    public static final int SMART_CURRENT_LIMIT_AMPS = 40;
+
   }
 }

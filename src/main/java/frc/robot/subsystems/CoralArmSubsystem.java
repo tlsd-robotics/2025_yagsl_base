@@ -12,6 +12,8 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +35,8 @@ public class CoralArmSubsystem extends SubsystemBase {
   private DutyCycleEncoder absoluteEncoder = new DutyCycleEncoder(CoralArmConstants.ABSOLUTE_ENCODER_PORT);
   private EncoderVelocityTracker encoderVelocity = new EncoderVelocityTracker(this::getRawAngle);
 
+  private double intakeSpeed = 0;
+
   private ArmController arm = new ArmController(
     angleMotor::set,
     this::getRawAngle,
@@ -40,7 +44,7 @@ public class CoralArmSubsystem extends SubsystemBase {
 
     CoralArmConstants.ABSOLUTE_ENCODER_OFFSET_DEGREES,
     CoralArmConstants.ANGLE_SETPOINT_TOLERANCE_DEGREES,
-    new RangeConstraint(-90, 90),
+    CoralArmConstants.ANGLE_RANGE_DEGREES,
 
     CoralArmConstants.ANGLE_PID_P,
     CoralArmConstants.ANGLE_PID_I,
@@ -80,7 +84,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public double getRawAngle() {
-    return (absoluteEncoder.get() * 360.0);
+    return MathUtil.inputModulus((absoluteEncoder.get() * 360.0), -180.0, 180.0);
   }
 
   public double getAngularVelocity() {
@@ -89,6 +93,10 @@ public class CoralArmSubsystem extends SubsystemBase {
 
   public double getAngle() {
     return arm.getAngle();
+  }
+
+  public double getSetpoint() {
+    return arm.getSetpoint();
   }
 
   public void setPosition(double angleDegrees) {
@@ -100,7 +108,7 @@ public class CoralArmSubsystem extends SubsystemBase {
   }
 
   public void setIntake(double speed) {
-    intakeMotor.set(speed);
+    intakeSpeed = speed;
   }
 
   //Enables angle control
@@ -132,5 +140,12 @@ public class CoralArmSubsystem extends SubsystemBase {
   public void periodic() {
     arm.execute();
     encoderVelocity.update();
+
+    if (arm.getState() != AngleControlState.DISABLED) {
+      intakeMotor.set(intakeSpeed);
+    }
+    else {
+      intakeMotor.set(0);
+    }
   }
 }
