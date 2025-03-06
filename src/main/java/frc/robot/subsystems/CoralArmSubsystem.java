@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkMax;
+
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -13,18 +14,19 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Common.ArmController;
 import frc.Common.EncoderVelocityTracker;
 import frc.Common.ArmController.AngleControlState;
 import frc.Common.ArmController.AngleUnit;
-import frc.Common.ConstraintClasses.RangeConstraint;
 import frc.robot.Constants.*;
 
 public class CoralArmSubsystem extends SubsystemBase {
+  public static final Runnable getSetpoint = null;
+public static final String NamedCommands = null;
   /** Creates a new CoralArmSubsystem. */
 
   private SparkMax angleMotor = new SparkMax(CoralArmConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
@@ -107,8 +109,10 @@ public class CoralArmSubsystem extends SubsystemBase {
     arm.setProfiled(angleDegrees);
   }
 
-  public void setIntake(double speed) {
+  //No return
+  public Runnable setIntake(double speed) {
     intakeSpeed = speed;
+        return null;
   }
 
   //Enables angle control
@@ -148,4 +152,9 @@ public class CoralArmSubsystem extends SubsystemBase {
       intakeMotor.set(0);
     }
   }
+
+  //DoubleSupplier
+public Command run(Runnable setIntake) {
+    throw new UnsupportedOperationException("Unimplemented method 'run'");
+}
 }

@@ -4,7 +4,6 @@
 
 package frc.robot.commands.AlgaeArm;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Timer;

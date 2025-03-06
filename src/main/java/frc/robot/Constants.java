@@ -68,9 +68,9 @@ public final class Constants {
     public static final int ELEVATOR_MOTOR_ID = 35;
     public static final boolean ELEVATOR_MOTOR_INVERTED = false;
 
-    public static final double STALL_THRESHOLD_AMPS = 40.0; //TODO: tune this
-    public static final int ELEVATOR_MOTOR_SMART_CURRENT_LIMIT = 40;
-
+    public static final double STALL_THRESHOLD_AMPS = 40.0; 
+    public static final int ELEVATOR_MOTOR_SMART_CURRENT_LIMIT = 80;
+    //OG Limit 40
     public static final double VELOCITY_TOLERANCE_MS = 0.001;
 
     //Autohome constants
@@ -81,9 +81,9 @@ public final class Constants {
     public static final double SETPOINT_L2 = Units.inchesToMeters(10);
     public static final double SETPOINT_L3 = Units.inchesToMeters(25);
     public static final double SETPOINT_HOME = 0;
-
+    //12
     //PID Controller Constants
-    public static final double PID_P = 12.0;
+    public static final double PID_P = 15.0;
     public static final double PID_I = 0.0;
     public static final double PID_D = 0.0;
 
@@ -103,8 +103,8 @@ public final class Constants {
     public static final double POSITION_CONVERSION_FACTOR = (PINION_GEAR_DIAMETER_M * Math.PI) / MOTOR_GEAR_RATIO;
     //Converts motor RPM into elevator velocity in m/s      Shaft revs per sec        * Distance Per Revolution
     public static final double VELOCITY_CONVERSION_FACTOR = (1 / (MOTOR_GEAR_RATIO * 60)) * PINION_GEAR_DIAMETER_M * Math.PI;
-
-    //Manual control constants
+    
+    //Manual Elevator control command
     public static final double MANUAL_CONTROL_RATE_M_S = 0.1;
   }
 
@@ -116,7 +116,7 @@ public final class Constants {
     public static final boolean ANGLE_MOTOR_INVERTED = false;
     public static final boolean INTAKE_MOTOR_INVERTED = false;
     public static final int ANGLE_MOTOR_SMART_CURRENT_LIMIT = 40;
-    public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 20;
+    public static final int INTAKE_MOTOR_SMART_CURRENT_LIMIT = 40;
     public static final int ABSOLUTE_ENCODER_PORT = 4;
     public static final double ABSOLUTE_ENCODER_OFFSET_DEGREES = 42.17;
     public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
@@ -137,10 +137,10 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
     public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
 
-    public static final double INTAKE_IN_SPEED = -0.3;
+    public static final double INTAKE_IN_SPEED = -0.6;
     public static final double INTAKE_OUT_SPEED = 0.3;
     
-    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 30.0;
+    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 80.0;
 
   }
 
@@ -173,14 +173,15 @@ public final class Constants {
 
     public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
 
-    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 30;
-    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 30;
+    public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 140;
+    public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 140;
 
     public static final double DRIVER_TRIGGER_REVERSE_THRESHOLD = 0;
+
     public static final double INTAKE_OUT_SPEED = 1.0;
     public static final double INTAKE_IN_SPEED = -1.0;
 
-    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 30.0;
+    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 90.0;
   }
 
   public static class ClimberConstants {

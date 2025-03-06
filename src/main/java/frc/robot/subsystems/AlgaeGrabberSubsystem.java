@@ -21,7 +21,6 @@ import frc.Common.ArmController;
 import frc.Common.EncoderVelocityTracker;
 import frc.Common.ArmController.AngleControlState;
 import frc.Common.ArmController.AngleUnit;
-import frc.Common.ConstraintClasses.RangeConstraint;
 import frc.robot.Constants.*;
 
 public class AlgaeGrabberSubsystem extends SubsystemBase {

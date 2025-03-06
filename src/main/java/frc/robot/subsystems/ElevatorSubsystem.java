@@ -22,10 +22,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.Common.SetpointConstructors;
 import frc.robot.Constants.ElevatorConstants;
 
-//TODO: Fix stall detection by averaging speed over time. It is currently detecting stops from imperfections in the racks.
 
 public class ElevatorSubsystem extends SubsystemBase {
 
@@ -65,6 +63,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private ElevatorState currentState = ElevatorState.DISABLED;
 
   private Alert noOpSetAlert = new Alert("Attempted to change elevator setpoint with control disabled", AlertType.kInfo);
+  @SuppressWarnings("unused")
   private Alert stallDetectedAlert = new Alert("Stall Detected. Elevator Control Disabled. AUTOHOME IMMEDIATLEY UPON REENABLE!", AlertType.kError);
 
   //PUBLIC METHODS

@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
@@ -108,6 +109,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+
+    NamedCommands.registerCommand("DropCoral", null);
   }
   
   public void zeroGyro() {

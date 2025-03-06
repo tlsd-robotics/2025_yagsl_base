@@ -4,7 +4,6 @@
 
 package frc.robot.commands.CoralArm;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -22,6 +21,7 @@ public class CoralArmDefualtCommand extends Command {
   Trigger driverTrigger;
   CoralArmSubsystem coralArm;
   Timer angleControlTimer = new Timer();
+  public Object andThen;
 
   /** Creates a new CoralArmDefualtCommand. */
   public CoralArmDefualtCommand(DoubleSupplier angleControl, Trigger intakeIn, Trigger intakeOut, Trigger driverTrigger, CoralArmSubsystem coralArm) {
@@ -35,7 +35,11 @@ public class CoralArmDefualtCommand extends Command {
     addRequirements(coralArm);
   }
 
-  // Called when the command is initially scheduled.
+  public CoralArmDefualtCommand(Object angleControl2, boolean b, boolean c, Object driverTrigger2,
+        CoralArmSubsystem coralArm2) {
+}
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
     angleControlTimer.restart();

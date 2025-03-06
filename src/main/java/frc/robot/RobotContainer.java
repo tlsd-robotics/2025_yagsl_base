@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
+@SuppressWarnings("unused")
 public class RobotContainer {
   // Create subsystems here
   private final DrivetrainSubsystem drivetrain = new DrivetrainSubsystem();
@@ -115,16 +116,26 @@ public class RobotContainer {
     controller.back().onTrue(new InstantCommand(elevator::autoHome, elevator).until(() -> {return elevator.getState() != ElevatorState.HOMING;}));
   }
 
+
+
   private void configureAutoCommands() {
+    //Must add commands here before autoChooser command
+    NamedCommands.registerCommand("DoNothing", new DoNothing());
+    NamedCommands.registerCommand("DropCoral", new CoralArmDefualtCommand(() -> -controller.getLeftY(), controller.povRight(), controller.povLeft(), driverStick.trigger(), coralArm));
+    NamedCommands.registerCommand("ElevatorUp", new SetElevator(elevator, ElevatorConstants.SETPOINT_L3));
+    NamedCommands.registerCommand("FeedIntake", new SetCoralArm(CoralArmConstants.INTAKE_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(CoralArmConstants.INTAKE_IN_SPEED))).repeatedly());
+    NamedCommands.registerCommand("Homesetpoint", new SetCoralArm(CoralArmConstants.HOME_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(0))));
+
     autoChooser = AutoBuilder.buildAutoChooser();
 
-    // Add Auto Commands here
-    NamedCommands.registerCommand("DoNothing", new DoNothing());
-
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
-  }
-
-  public Command getAutonomousCommand() {
+    }
+     
+      private Command SetElevator(ElevatorSubsystem elevator2, double setpointL3) {
+        throw new UnsupportedOperationException("Unimplemented method 'SetElevator'");
+      }
+    
+      public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
 
