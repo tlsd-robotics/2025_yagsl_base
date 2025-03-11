@@ -45,41 +45,7 @@
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "FeedIntake",
-      "waypointRelativePos": 0.1,
-      "endWaypointRelativePos": 0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "FeedIntake"
-        }
-      }
-    },
-    {
-      "name": "HomeSetpoint",
-      "waypointRelativePos": 0.45,
-      "endWaypointRelativePos": 0.2576271186440678,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "HomeSetpoint"
-        }
-      }
-    },
-    {
-      "name": "DropCoral",
-      "waypointRelativePos": 0.95,
-      "endWaypointRelativePos": 1.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "DropCoral"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,

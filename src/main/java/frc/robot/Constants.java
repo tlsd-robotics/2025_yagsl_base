@@ -95,7 +95,7 @@ public final class Constants {
     public static final double ELEVATOR_MAX_HEIGHT_M = Units.inchesToMeters(26.5);
 
     public static final double ELEVATOR_ALLOWED_ACCEL_MSS = 0.8;
-    public static final double MOTOR_GEAR_RATIO = 25.0;
+    public static final double MOTOR_GEAR_RATIO = 15.0;
     public static final double PINION_GEAR_DIAMETER_M = Units.inchesToMeters(1);
     public static final double ELEVATOR_MOTOR_RPS_MAX = 5700.0/60.0;
     public static final double ELEVATOR_MAX_SPEED_MS = (ELEVATOR_MOTOR_RPS_MAX / MOTOR_GEAR_RATIO) * PINION_GEAR_DIAMETER_M * Math.PI;
@@ -122,9 +122,9 @@ public final class Constants {
     public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
 
 
-    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-15.0, 58.0);
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-20.0, 60.0);
 
-    public static final double ANGLE_PID_P = 0.012;
+    public static final double ANGLE_PID_P = 0.016;
     public static final double ANGLE_PID_I = 0.00001;
     public static final double ANGLE_PID_D = 0;
 

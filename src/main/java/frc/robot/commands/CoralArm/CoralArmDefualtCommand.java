@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.CoralArmConstants;
 import frc.robot.subsystems.CoralArmSubsystem;
@@ -37,6 +38,10 @@ public class CoralArmDefualtCommand extends Command {
 
   public CoralArmDefualtCommand(Object angleControl2, boolean b, boolean c, Object driverTrigger2,
         CoralArmSubsystem coralArm2) {
+}
+
+public CoralArmDefualtCommand(InstantCommand instantCommand) {
+    //TODO Auto-generated constructor stub
 }
 
 // Called when the command is initially scheduled.

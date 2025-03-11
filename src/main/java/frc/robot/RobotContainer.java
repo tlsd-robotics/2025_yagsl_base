@@ -23,11 +23,17 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.ElevatorState;
 
+import java.security.PrivateKey;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -82,7 +88,7 @@ public class RobotContainer {
     coralArm.setDefaultCommand(new CoralArmDefualtCommand(() -> -controller.getLeftY(), controller.povRight(), controller.povLeft(), driverStick.trigger(), coralArm));
     algaeGrabber.setDefaultCommand(new AlgeaGrabberDefaultCommand(() -> -controller.getRightY(), controller.povDown(), controller.povUp(), algaeGrabber));
     elevator.setDefaultCommand(new ElevatorDefaultCommand(() -> {return controller.getRightTriggerAxis() - controller.getLeftTriggerAxis();}, elevator));
-
+    
     // Set Default Commands here
 
     
@@ -119,13 +125,13 @@ public class RobotContainer {
 
 
   private void configureAutoCommands() {
+
     //Must add commands here before autoChooser command
     NamedCommands.registerCommand("DoNothing", new DoNothing());
-    NamedCommands.registerCommand("DropCoral", new CoralArmDefualtCommand(() -> -controller.getLeftY(), controller.povRight(), controller.povLeft(), driverStick.trigger(), coralArm));
+    NamedCommands.registerCommand("DropCoral", new CoralArmDefualtCommand(new InstantCommand(() -> coralArm.setIntake(0.1))));
     NamedCommands.registerCommand("ElevatorUp", new SetElevator(elevator, ElevatorConstants.SETPOINT_L3));
-    NamedCommands.registerCommand("FeedIntake", new SetCoralArm(CoralArmConstants.INTAKE_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(CoralArmConstants.INTAKE_IN_SPEED))).repeatedly());
-    NamedCommands.registerCommand("Homesetpoint", new SetCoralArm(CoralArmConstants.HOME_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(0))));
-
+    NamedCommands.registerCommand("FeedIntake", new SetCoralArm(CoralArmConstants.INTAKE_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(CoralArmConstants.INTAKE_IN_SPEED))));
+    NamedCommands.registerCommand("HomeSetpoint", new SetCoralArm(CoralArmConstants.HOME_SETPOINT, coralArm).alongWith(new InstantCommand(() -> coralArm.setIntake(0))));
     autoChooser = AutoBuilder.buildAutoChooser();
 
     SmartDashboard.putData("Autonomous Chooser", autoChooser);
@@ -134,7 +140,7 @@ public class RobotContainer {
       private Command SetElevator(ElevatorSubsystem elevator2, double setpointL3) {
         throw new UnsupportedOperationException("Unimplemented method 'SetElevator'");
       }
-    
+
       public Command getAutonomousCommand() {
     return autoChooser.getSelected();
   }
