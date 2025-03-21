@@ -6,6 +6,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -14,11 +15,9 @@ import frc.robot.Constants.VisionConstants;
 
 public  class Vision {
     //================== Cameras ========================
-    public static PhotonCamera armCam = new PhotonCamera(VisionConstants.ARM_CAM_NAME);
-    public static PhotonCamera intakeCam = new PhotonCamera(VisionConstants.INTAKE_CAM_NAME);
-
+    public static PhotonCamera cam = new PhotonCamera(VisionConstants.CAM_NAME);
     //==================== Targets ==========================
-    public static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+    public static AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
 
     //==================== Pose Estimation ==========================
     public static Transform3d robotToCam = new Transform3d(VisionConstants.ROBOT_TO_CAM_TRANSLATION, VisionConstants.ROBOT_TO_CAM_ROTATION); // In meters and radians
@@ -47,5 +46,48 @@ public  class Vision {
      */
     public static PhotonTrackedTarget filterResults(PhotonPipelineResult result) {
         return result.getTargets().stream().filter(t -> t.getFiducialId() != 3 && t.getFiducialId() != 8).findFirst().get();
+    }
+
+    public static Transform3d getTargetTransform() {
+        PhotonTrackedTarget target = cam.getLatestResult().getBestTarget();
+        if (target != null) {
+            return target.getBestCameraToTarget();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public static double getTargetXMeters(double def) {
+        Transform3d targTransform = getTargetTransform();
+
+        if (targTransform == null) {
+            return def;
+        }
+        else {
+            return targTransform.getX();
+        }
+    }
+
+    public static double getTargetYMeters(double def) {
+        Transform3d targTransform = getTargetTransform();
+
+        if (targTransform == null) {
+            return def;
+        }
+        else {
+            return targTransform.getY();
+        }
+    }
+
+    public static double getTargetRotationDegrees(double def) {
+        Transform3d targTransform = getTargetTransform();
+
+        if (targTransform == null) {
+            return def;
+        }
+        else {
+            return -MathUtil.inputModulus(Math.toDegrees(targTransform.getRotation().getZ()), 0, 360) - 180;
+        }
     }
 }

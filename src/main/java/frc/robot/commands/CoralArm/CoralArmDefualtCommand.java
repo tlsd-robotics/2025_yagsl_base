@@ -69,6 +69,7 @@ public CoralArmDefualtCommand(InstantCommand instantCommand) {
     //Control Angle
     coralArm.setPosition(coralArm.getSetpoint() + angleControl.getAsDouble() *  CoralArmConstants.MANUAL_CONTROL_RATE_DEG_SEC * angleControlTimer.get());
     angleControlTimer.restart();
+
   }
 
   // Called once the command ends or is interrupted.

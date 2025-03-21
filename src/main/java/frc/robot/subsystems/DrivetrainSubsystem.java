@@ -109,8 +109,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
-
-    NamedCommands.registerCommand("DropCoral", null);
   }
   
   public void zeroGyro() {
@@ -129,5 +127,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     drive.updateOdometry();
+  }
+
+  public void drive(ChassisSpeeds chassisSpeeds) {
+    drive.drive(chassisSpeeds);
+  }
+
+  public double getMaxVelocityMS() {
+    return drive.getMaximumChassisVelocity();
   }
 }

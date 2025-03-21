@@ -49,8 +49,10 @@ public final class Constants {
   public static final class VisionConstants {
     public static final Translation3d ROBOT_TO_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.5), 0.0, Units.inchesToMeters(4)); // X = forward, Y = left, Z = up
     public static final Rotation3d ROBOT_TO_CAM_ROTATION = new Rotation3d(0.0, Units.degreesToRadians(44.5), 0.0);
-    public static final String ARM_CAM_NAME = "TopUsb";
-    public static final String INTAKE_CAM_NAME = "BottomUsb";
+    public static final String CAM_NAME = "mainCamera";
+
+    public static final double LEFT_TARGET_OFFSET_M = Units.inchesToMeters(-6.5);
+    public static final double RIGHT_TARGET_OFFSET_M = Units.inchesToMeters(6.5);
   }
 
   public static final class AutonConstants {
@@ -122,7 +124,7 @@ public final class Constants {
     public static final boolean ABSOLUTE_ENCODER_INVERTED = false;
 
 
-    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-20.0, 60.0);
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(9.8, 60.0);
 
     public static final double ANGLE_PID_P = 0.016;
     public static final double ANGLE_PID_I = 0.00001;
@@ -137,7 +139,7 @@ public final class Constants {
     public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 90.0;
     public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 90.0;
 
-    public static final double INTAKE_IN_SPEED = -0.6;
+    public static final double INTAKE_IN_SPEED = -0.7;
     public static final double INTAKE_OUT_SPEED = 0.3;
     
     public static final double MANUAL_CONTROL_RATE_DEG_SEC = 80.0;
@@ -157,11 +159,16 @@ public final class Constants {
     public static final boolean ABSOLUTE_ENCODER_INVERTED = true;
 
 
-    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-116, 80);
+    public static final RangeConstraint ANGLE_RANGE_DEGREES = new RangeConstraint(-120, 73.7);
 
     public static final double UP_SETPOINT = 70;
-    public static final double HOME_SETPOINT = -80;
-    public static final double INTAKE_SETPOINT = -116;
+    public static final double HOME_SETPOINT = -70;
+    public static final double INTAKE_SETPOINT = -120;
+    public static final double L1_SETPOINT = -40;
+    public static final double L2_SETPOINT = -62;
+    public static final double L3_SETPOINT = -64.3;
+    public static final double L4_SETPOINT = 50;
+
 
     public static final double ANGLE_PID_P = 0.015;
     public static final double ANGLE_PID_I = 0.001;
@@ -171,7 +178,7 @@ public final class Constants {
     public static final double FF_KG = 0;
     public static final double FF_KV = 0;
 
-    public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 1.0;
+    public static final double ANGLE_SETPOINT_TOLERANCE_DEGREES = 3.5;
 
     public static final double MAX_ANGULAR_VELOCITY_DEG_SEC = 140;
     public static final double MAX_PROFILED_ANGULAR_ACCELERATION_DEG_SEC_SEC = 140;
@@ -181,7 +188,8 @@ public final class Constants {
     public static final double INTAKE_OUT_SPEED = 1.0;
     public static final double INTAKE_IN_SPEED = -1.0;
 
-    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 90.0;
+    public static final double MANUAL_CONTROL_RATE_DEG_SEC = 160.0;
+    public static final int DETECT_THRESHOLD = 600;
   }
 
   public static class ClimberConstants {

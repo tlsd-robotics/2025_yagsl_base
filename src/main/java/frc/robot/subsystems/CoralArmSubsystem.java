@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.ColorSensorV3;
 import com.revrobotics.spark.SparkMax;
 
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -13,8 +14,10 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,9 +30,10 @@ import frc.robot.Constants.*;
 
 public class CoralArmSubsystem extends SubsystemBase {
   public static final Runnable getSetpoint = null;
-public static final String NamedCommands = null;
+  public static final String NamedCommands = null;
   /** Creates a new CoralArmSubsystem. */
 
+  private ColorSensorV3 sensor;
   private SparkMax angleMotor = new SparkMax(CoralArmConstants.ANGLE_MOTOR_ID, MotorType.kBrushless);
   private SparkMax intakeMotor = new SparkMax(CoralArmConstants.INTAKE_MOTOR_ID, MotorType.kBrushless);
   private SparkMaxConfig angleConfig = new SparkMaxConfig();
@@ -39,6 +43,32 @@ public static final String NamedCommands = null;
   private EncoderVelocityTracker encoderVelocity = new EncoderVelocityTracker(this::getRawAngle);
 
   private double intakeSpeed = 0;
+
+  private int sensorProximity = 0;
+  private boolean isLoaded = false;
+  
+  Thread sensorUpdater = new Thread(
+    () -> {
+      Timer updateTimer = new Timer();
+      updateTimer.restart();
+
+      while(true) {
+        if (updateTimer.get() > 0.2) {
+          sensorProximity = sensor.getProximity();
+          if (sensorProximity >= CoralArmConstants.DETECT_THRESHOLD) {
+            isLoaded = true;
+          }
+          else {
+            isLoaded = false;
+          }
+
+          updateTimer.reset();
+
+         
+        }
+      }
+    }
+  );
 
   private ArmController arm = new ArmController(
     angleMotor::set,
@@ -65,26 +95,30 @@ public static final String NamedCommands = null;
   );
 
   private Alert hardwareFaultAlert = new Alert("Coral arm control has been disabled due to a hardware fault", AlertType.kError);
+    
+    public CoralArmSubsystem() {
+      intakeConfig.idleMode(IdleMode.kBrake);
+      intakeConfig.smartCurrentLimit(CoralArmConstants.INTAKE_MOTOR_SMART_CURRENT_LIMIT);
+      intakeConfig.inverted(CoralArmConstants.INTAKE_MOTOR_INVERTED);
+      angleConfig.idleMode(IdleMode.kBrake);
+      angleConfig.smartCurrentLimit(CoralArmConstants.ANGLE_MOTOR_SMART_CURRENT_LIMIT);
+      angleConfig.inverted(CoralArmConstants.ANGLE_MOTOR_INVERTED);
+  
+      angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+      intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  
+      absoluteEncoder.setInverted(CoralArmConstants.ABSOLUTE_ENCODER_INVERTED);
+  
+      sensor = new ColorSensorV3(I2C.Port.kOnboard);
 
-  public CoralArmSubsystem() {
-    intakeConfig.idleMode(IdleMode.kBrake);
-    intakeConfig.smartCurrentLimit(CoralArmConstants.INTAKE_MOTOR_SMART_CURRENT_LIMIT);
-    intakeConfig.inverted(CoralArmConstants.INTAKE_MOTOR_INVERTED);
-    angleConfig.idleMode(IdleMode.kBrake);
-    angleConfig.smartCurrentLimit(CoralArmConstants.ANGLE_MOTOR_SMART_CURRENT_LIMIT);
-    angleConfig.inverted(CoralArmConstants.ANGLE_MOTOR_INVERTED);
+      if (!absoluteEncoder.isConnected()) {
+        arm.disable();
+        hardwareFaultAlert.setText(hardwareFaultAlert.getText() + ": Absolute encoder fault");
+        hardwareFaultAlert.set(true);
+      }
 
-    angleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    intakeMotor.configure(intakeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
-    absoluteEncoder.setInverted(CoralArmConstants.ABSOLUTE_ENCODER_INVERTED);
-
-    if (!absoluteEncoder.isConnected()) {
-      arm.disable();
-      hardwareFaultAlert.setText(hardwareFaultAlert.getText() + ": Absolute encoder fault");
-      hardwareFaultAlert.set(true);
+      sensorUpdater.start();
     }
-  }
 
   public double getRawAngle() {
     return MathUtil.inputModulus((absoluteEncoder.get() * 360.0), -180.0, 180.0);
@@ -145,6 +179,9 @@ public static final String NamedCommands = null;
   public void periodic() {
     arm.execute();
     encoderVelocity.update();
+    
+    SmartDashboard.putBoolean("SensorIsLoaded", isLoaded);
+    SmartDashboard.putNumber("Sensor proximity", sensorProximity);//4061
 
     if (arm.getState() != AngleControlState.DISABLED) {
       intakeMotor.set(intakeSpeed);
@@ -152,6 +189,14 @@ public static final String NamedCommands = null;
     else {
       intakeMotor.set(0);
     }
+  }
+  
+  public ColorSensorV3 getSensor() {
+    return sensor;
+  }
+  
+  public boolean isLoaded() {
+    return isLoaded;
   }
 
   //DoubleSupplier

@@ -5,39 +5,51 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ArmToL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TestPath1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorL3AndL4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "TestPath2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Drop"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "New Path"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "ElevatorHome"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "FeedIntake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DoNothing"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "New New New Path"
+            "name": "ArmToHome"
           }
         }
       ]

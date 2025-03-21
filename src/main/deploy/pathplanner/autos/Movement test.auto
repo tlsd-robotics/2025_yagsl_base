@@ -5,33 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "L1 Coral Drop"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
+            "name": "ArmToL4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Reef to Coral station"
+            "pathName": "New New Path"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 3.0
+            "name": "ElevatorL3AndL4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Drop"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Station to L1"
+            "pathName": "New Path"
           }
         }
       ]
